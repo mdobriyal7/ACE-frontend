@@ -1,7 +1,5 @@
 import axios from "axios";
 import ProductTable from "./components/ProductTable";
-import { Container } from "react-bootstrap";
-import ProductForm from "./components/ProductForm";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

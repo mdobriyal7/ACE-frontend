@@ -3,7 +3,6 @@ import { Modal, Form, Button, Container } from "react-bootstrap";
 import { IoMdAdd } from "react-icons/io";
 import { MdAddCircle } from "react-icons/md";
 import { useDropzone } from "react-dropzone";
-import { postProduct } from "../services/Api";
 import { useDispatch } from "react-redux";
 import { addNewProduct, getProducts } from "../redux/productSlice";
 import { toast } from "react-toastify";
@@ -45,7 +44,7 @@ function ProductForm() {
 
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
-  const [FileError, setFileError] = useState("");
+//   const [FileError, setFileError] = useState("");
   const [productForm, setProductForm] = useState({
     name: "",
     vat: 10,
@@ -285,7 +284,7 @@ function ProductForm() {
                     />
                   </div>
                   <p className="upload-manually">Upload Manually</p>
-                  {FileError && <div className="error-msg">{FileError}</div>}
+                  {/* {FileError && <div className="error-msg">{FileError}</div>} */}
                 </div>
               </div>
               <Button
