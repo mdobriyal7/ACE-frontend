@@ -1,0 +1,64 @@
+#root > .innersection_dropAndUpload {
+  padding: 16px !important;
+  margin: 8px 16px !important;
+  margin-top: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  align-items: center;
+  border-style: dashed;
+  border-color: #bab7b5;
+  height: calc(100vh - 80px);
+  position: relative;
+  height: max-content;
+}
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.pdf-size-msg {
+  font-weight: 600;
+  font-size: 18px !important;
+  margin-right: 24px !important;
+  color: brown;
+}
+.upload-manually {
+  font-weight: bold;
+  font-size: 18px;
+}
+.pdf-container {
+  width: 100%;
+  height: 800px;
+  background-color: #e4e4e4;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: crosshair;
+}
+.error-msg {
+  color: red;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+.fa-solid,
+.fas {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 30px;
+}
+.innersection_dropAndUpload > .container > div {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  border-style: none !important;
+}
+.btn_color {
+  color: " #bd47e5";
+}
