@@ -138,7 +138,8 @@ function ProductForm() {
       ...productForm,
       priceGross: grossPrice.toFixed(2),
     });
-  }, [productForm.vat, productForm.priceNet]);
+}, [productForm.vat, productForm.priceNet, productForm]);
+
 
   return (
     <>
