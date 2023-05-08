@@ -39,7 +39,7 @@ const ProductTable = () => {
     <>
       <div className="d-flex justify-content-between align-items-baseline mt-3 mb-4">
         <div>
-          <h1 style={{color:"#8a4141"}}>MY SHOP PRODUCTS</h1>
+          <h1 className="shop_title">MY SHOP PRODUCTS</h1>
         </div>
         <ProductForm />
       </div>
@@ -58,7 +58,7 @@ const ProductTable = () => {
         <tbody>
           {products && products.length > 0 ? (
             products.map((product) => (
-              <tr key={product.id}>
+              <tr key={product._id}>
                 <td>{product.name}</td>
                 <td>{product.vat}</td>
                 <td>
@@ -81,7 +81,7 @@ const ProductTable = () => {
                 </td>
                 <td>
                   <Button
-                    variant="danger"
+                    style={{backgroundColor:"#26e49e",border:"none"}}
                     onClick={() => handleDelete(product._id)}
                   >
                     Delete

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Modal, Form, Button, Container } from "react-bootstrap";
 import { IoMdAdd } from "react-icons/io";
 import { MdAddCircle } from "react-icons/md";
@@ -6,6 +6,8 @@ import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { addNewProduct, getProducts } from "../redux/productSlice";
 import { toast } from "react-toastify";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import "./ProductForm.css";
 
 const baseStyle = {
@@ -44,7 +46,9 @@ function ProductForm() {
 
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
-//   const [FileError, setFileError] = useState("");
+  //   const [FileError, setFileError] = useState("");
+  const [imageFormatError, setImageFormatError] = useState("");
+
   const [productForm, setProductForm] = useState({
     name: "",
     vat: 10,
@@ -52,19 +56,17 @@ function ProductForm() {
     priceNet: 0,
     totalStock: 0,
   });
-    console.log(productForm);
-    
-    const onDrop = (acceptedFiles) => {
-      if (acceptedFiles.length !== 1) {
-        alert("Only drop one file at a time");
-        return;
-      }
-      const file = acceptedFiles[0];
-      setFile(file);
-      setFileName(file.name);
-    };
+  console.log(productForm);
 
-  
+  const onDrop = (acceptedFiles) => {
+    if (acceptedFiles.length !== 1) {
+      alert("Only drop one file at a time");
+      return;
+    }
+    const file = acceptedFiles[0];
+    setFile(file);
+    setFileName(file.name);
+  };
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({ onDrop: onDrop, noClick: true });
@@ -81,8 +83,10 @@ function ProductForm() {
 
   const handleFileUpload = (e) => {
     let selectedFile = e.target.files[0];
-    if (selectedFile) setFile(selectedFile);
-    else {
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(file.name);
+    } else {
       console.log("Please select your file");
     }
   };
@@ -103,6 +107,13 @@ function ProductForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const isImageValid = validateImageFormat();
+    if (!isImageValid) {
+      window.alert("Image Error");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("image", file);
     formData.append("name", productForm.name);
@@ -129,7 +140,7 @@ function ProductForm() {
     setFile(null);
   };
 
-  useEffect(() => {
+  const handlePriceCalculation = useCallback(() => {
     const vatValue = parseFloat(productForm.vat);
     const netPrice = parseFloat(productForm.priceNet);
     const grossPrice = netPrice * (1 + vatValue / 100);
@@ -137,15 +148,39 @@ function ProductForm() {
       ...productForm,
       priceGross: grossPrice.toFixed(2),
     });
-}, [productForm.vat, productForm.priceNet, productForm]);
+  }, [productForm.vat, productForm.priceNet]);
 
+  useEffect(() => {
+    handlePriceCalculation();
+  }, [handlePriceCalculation]);
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Add New product
+    </Tooltip>
+  );
+
+  const validateImageFormat = () => {
+    if (file && !["image/jpeg", "image/png"].includes(file.type)) {
+      setImageFormatError("Only JPG and PNG formats are allowed.");
+      return false;
+    }
+    setImageFormatError("");
+    return true;
+  };
 
   return (
     <>
       <div onClick={handleShow}>
-        <h3 className="my-0 btn_color">
-          Add <MdAddCircle size={40} />
-        </h3>
+        <OverlayTrigger
+          placement="bottom"
+          delay={{ show: 50, hide: 400 }}
+          overlay={renderTooltip}
+        >
+          <h3 className="my-0 btn_color">
+            Add <MdAddCircle size={40} style={{ color: "#a975f2" }} />
+          </h3>
+        </OverlayTrigger>
       </div>
 
       <Modal
@@ -188,19 +223,13 @@ function ProductForm() {
                   <Form.Select
                     aria-label="Default select example"
                     name="vat"
-                    value={productForm.vat}
                     onChange={handleProductFormChange}
                     required
+                    defaultValue={productForm.vat}
                   >
-                    <option value={10} selected={productForm.vat === 10}>
-                      10
-                    </option>
-                    <option value={15} selected={productForm.vat === 15}>
-                      15
-                    </option>
-                    <option value={25} selected={productForm.vat === 25}>
-                      25
-                    </option>
+                    <option value={10}>10</option>
+                    <option value={15}>15</option>
+                    <option value={25}>25</option>
                   </Form.Select>
                 </div>
               </Form.Group>
@@ -266,7 +295,9 @@ function ProductForm() {
                     <p className="pdf-size-msg mb-4">
                       Format: Image(jpg/png) - Max. size: 50 M.B
                     </p>
-                    <p>{fileName}</p>
+                    <p style={{ color: "red" }}>
+                      {fileName ? `FILE : ${fileName}` : ""}
+                    </p>
                   </div>
 
                   <div className="my-2">
