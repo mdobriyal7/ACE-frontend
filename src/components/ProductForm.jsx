@@ -47,6 +47,7 @@ function ProductForm() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   //   const [FileError, setFileError] = useState("");
+  const [imageFormatError, setImageFormatError] = useState("");
 
   const [productForm, setProductForm] = useState({
     name: "",
@@ -109,7 +110,7 @@ function ProductForm() {
 
     const isImageValid = validateImageFormat();
     if (!isImageValid) {
-      window.alert("Image Error");
+      window.alert(`Image Error:: ${imageFormatError}`);
       return;
     }
 
