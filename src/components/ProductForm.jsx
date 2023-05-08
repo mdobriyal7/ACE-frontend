@@ -47,7 +47,6 @@ function ProductForm() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   //   const [FileError, setFileError] = useState("");
-  const [imageFormatError, setImageFormatError] = useState("");
 
   const [productForm, setProductForm] = useState({
     name: "",
