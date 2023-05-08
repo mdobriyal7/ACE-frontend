@@ -4,7 +4,7 @@ import { Table, Button } from "react-bootstrap";
 import { deleteSingleProduct, getProducts } from "../redux/productSlice";
 import { toast } from "react-toastify";
 import ProductForm from "./ProductForm";
-import './ProductTable.css';
+import "./ProductTable.css";
 
 const ProductTable = () => {
   const dispatch = useDispatch();
@@ -61,13 +61,9 @@ const ProductTable = () => {
               <tr key={product._id}>
                 <td>{product.name}</td>
                 <td>{product.vat}</td>
-                <td>
-                  {product.totalStock}
-                </td>
+                <td>{product.totalStock}</td>
                 <td>{product.priceNet}</td>
-                <td>
-                  {product.priceGross}
-                </td>
+                <td>{product.priceGross}</td>
                 <td>
                   {product.imageUrl ? (
                     <img
@@ -79,13 +75,19 @@ const ProductTable = () => {
                     <span>No image</span>
                   )}
                 </td>
-                <td>
+                <td><div className="d-flex justify-content-around">
                   <Button
-                    style={{backgroundColor:"#26e49e",border:"none"}}
+                    style={{ backgroundColor: "#26e49e", border: "none" }}
                     onClick={() => handleDelete(product._id)}
                   >
                     Delete
                   </Button>
+                  <Button
+                    style={{ backgroundColor: "#26e49e", border: "none" }}
+                  >
+                    Edit
+                  </Button>
+                  </div>
                 </td>
               </tr>
             ))

@@ -48,7 +48,7 @@ function ProductForm() {
   const [fileName, setFileName] = useState("");
   //   const [FileError, setFileError] = useState("");
   const [imageFormatError, setImageFormatError] = useState("");
-
+  console.log(imageFormatError);
   const [productForm, setProductForm] = useState({
     name: "",
     vat: 10,
@@ -85,7 +85,7 @@ function ProductForm() {
     let selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setFileName(file.name);
+      setFileName(selectedFile.name);
     } else {
       console.log("Please select your file");
     }
@@ -138,19 +138,20 @@ function ProductForm() {
       totalStock: 0,
     });
     setFile(null);
+    setFileName("");
   };
 
-  const { vat, priceNet } = productForm;
+  const { vat, priceGross } = productForm;
 
   const handlePriceCalculation = useCallback(() => {
     const vatValue = parseFloat(vat);
-    const netPrice = parseFloat(priceNet);
-    const grossPrice = netPrice * (1 + vatValue / 100);
+    const grossPrice = parseFloat(priceGross);
+    const netPrice = grossPrice * (1 - vatValue / 100);
     setProductForm((prevForm) => ({
       ...prevForm,
-      priceGross: grossPrice.toFixed(2),
+      priceNet: netPrice.toFixed(2),
     }));
-  }, [vat, priceNet]);
+  }, [vat, priceGross]);
 
   useEffect(() => {
     handlePriceCalculation();
@@ -163,6 +164,13 @@ function ProductForm() {
   );
 
   const validateImageFormat = () => {
+    if (file === null) {
+      console.log("executing")
+      toast.info("Please select a Image.", {
+        autoClose: 1500,
+      });
+      return
+    }
     if (file && !["image/jpeg", "image/png"].includes(file.type)) {
       setImageFormatError("Only JPG and PNG formats are allowed.");
       return false;
@@ -263,7 +271,7 @@ function ProductForm() {
                     name="priceNet"
                     value={productForm.priceNet}
                     onChange={handleProductFormChange}
-                    min="1"
+                    readOnly
                     required
                   />
                 </div>
@@ -280,7 +288,7 @@ function ProductForm() {
                     name="priceGross"
                     value={productForm.priceGross}
                     onChange={handleProductFormChange}
-                    readOnly
+                    min="1"
                     required
                   />
                 </div>
@@ -313,7 +321,6 @@ function ProductForm() {
                       id="file-upload"
                       type="file"
                       onChange={handleFileUpload}
-                      required
                     />
                   </div>
                   <p className="upload-manually">Upload Manually</p>
