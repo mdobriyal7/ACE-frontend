@@ -140,15 +140,17 @@ function ProductForm() {
     setFile(null);
   };
 
+  const { vat, priceNet } = productForm;
+
   const handlePriceCalculation = useCallback(() => {
-    const vatValue = parseFloat(productForm.vat);
-    const netPrice = parseFloat(productForm.priceNet);
+    const vatValue = parseFloat(vat);
+    const netPrice = parseFloat(priceNet);
     const grossPrice = netPrice * (1 + vatValue / 100);
-    setProductForm({
-      ...productForm,
+    setProductForm((prevForm) => ({
+      ...prevForm,
       priceGross: grossPrice.toFixed(2),
-    });
-  }, [productForm.vat, productForm.priceNet]);
+    }));
+  }, [vat, priceNet]);
 
   useEffect(() => {
     handlePriceCalculation();
